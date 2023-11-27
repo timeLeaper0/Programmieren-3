@@ -1,10 +1,10 @@
-class Gras {
-    zeile;
-    spalte;
+class Gras extends Lebewesen{
+    
     energie = 0;
+    
     constructor(z,s) {
-        this.zeile = z;
-        this.spalte = s;
+        super(z,s);
+        
         matrix[this.zeile][this.spalte] = 1;
     };
     spielzug() {
@@ -25,31 +25,12 @@ class Gras {
 
     };
     pflanzNeuesGrasfeld() {
-        let umgebung = [
-            [this.zeile + 1, this.spalte],
-            [this.zeile, this.spalte + 1],
-            [this.zeile - 1, this.spalte],
-            [this.zeile, this.spalte - 1],
-            [this.zeile + 1, this.spalte + 1],
-            [this.zeile + 1, this.spalte - 1],
-            [this.zeile - 1, this.spalte - 1],
-            [this.zeile - 1, this.spalte + 1]
-        ];
-        let umgebungGefiltert = [];
-        for (let i = 0; i < 8; i++) {
-            let koordinate = umgebung[i]
-            // hier, überprüfe ob die koordinate außerhalb der Matrix liegt
-            if (koordinate[0] < 0 || koordinate[0] >= matrix.length || koordinate[1] < 0 || koordinate[1] >= matrix.length) {
-
-            } else if (matrix[koordinate[0]][koordinate[1]] === 0) {
-                umgebungGefiltert.push(koordinate);
-            }
-        };
-
-        if(umgebungGefiltert.length > 0){
-          let koordinate = umgebungGefiltert[randomNumber(0,umgebungGefiltert.length)];
-            objekteArray.push(new Gras(koordinate[0],koordinate[1]));
-        }
+      let grasListe = super.gefilterteUmgebung(0)
+    
+         if(grasListe.length > 0){
+            let koordinate = grasListe[randomNumber(0,grasListe.length)];
+              objekteArray.push(new Gras(koordinate[0],koordinate[1]));
+          }
         return;
     }
 
