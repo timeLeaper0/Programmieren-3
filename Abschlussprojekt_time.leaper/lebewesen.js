@@ -36,7 +36,6 @@ class Lebewesen {
         let umgebungGefiltert = [];
         for (let i = 0; i < this.umgebung.length; i++) {
             let koordinate = this.umgebung[i]
-            // hier, überprüfe ob die koordinate außerhalb der Matrix liegt
             if (koordinate[0] < 0 || koordinate[0] >= matrix.length || koordinate[1] < 0 || koordinate[1] >= matrix.length) {
 
             } else if (matrix[koordinate[0]][koordinate[1]] === character) {

@@ -4,7 +4,6 @@ class Gras extends Lebewesen{
     
     constructor(z,s) {
         super(z,s);
-        
         matrix[this.zeile][this.spalte] = 1;
     };
     spielzug() {
