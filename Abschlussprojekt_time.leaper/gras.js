@@ -24,7 +24,7 @@ class Gras extends Lebewesen{
 
     };
     pflanzNeuesGrasfeld() {
-      let grasListe = super.gefilterteUmgebung(0)
+      let grasListe = this.gefilterteUmgebung(0)
     
          if(grasListe.length > 0){
             let koordinate = grasListe[randomNumber(0,grasListe.length)];
