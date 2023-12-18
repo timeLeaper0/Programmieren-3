@@ -15,7 +15,7 @@ function main(){
         matrix= data;
     }
 
-    socket.on("matrix", gotMatrix)
+    socket.on("matrix", gotMatrix);
 }
 
 function setup(){

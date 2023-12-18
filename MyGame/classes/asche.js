@@ -1,4 +1,5 @@
-const utils = require("./hilfsfunktionen.js")
+const Gras = require("./gras.js");
+const utils = require("./hilfsfunktionen.js");
 module.exports = class Asche {
     zeile;
     spalte;
@@ -11,9 +12,9 @@ module.exports = class Asche {
     spielzug() {
         if (this.energie === 0) {
             matrix[this.zeile][this.spalte] = 0;
-            if (utils.randomNumber(0, 10) === 1) {
-                objekteArray.push(new Gras(this.zeile, this.spalte));
-            }
+            // if (utils.randomNumber(0, 10) === 1) {
+            //     objekteArray.push(new Gras(this.zeile, this.spalte));
+            // }
             utils.löschObjekt(this.zeile, this.spalte, objekteArray);
         }
         else {
