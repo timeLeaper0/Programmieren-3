@@ -7,15 +7,25 @@ let seite = 500 / matrix.length
 
 function main(){
     const socket = io();
+    let button = document.getElementById("button");
     console.log('Ready to dispaly GoL...');
 
 
     function gotMatrix(data){
-        console.log(data);
+        //console.log(data);
         matrix= data;
     }
 
     socket.on("matrix", gotMatrix);
+
+
+    function resetMatrix(){
+        console.log("button geklicket...");
+        socket.emit("reset");
+    
+    }
+    
+    button.onclick = resetMatrix;
 }
 
 function setup(){
@@ -58,6 +68,11 @@ function quadrat(zeile, spalte, sw) {
 
     let seite = 500 / matrix.length
     rect(spalte * seite, zeile * seite, seite, seite)
+
+
+    
 };
 
 window.onload= main;
+
+

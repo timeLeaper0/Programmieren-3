@@ -16,6 +16,11 @@ let clients = [];
 let isGameRunning = false;
 let interValID;
 
+i = 0;
+matrix = createMatrix(100);
+objekteArray = [];
+jahreszeiten = 0;
+
 app.use(express.static("./client"));
 
 app.get("/", function (req, res) {
@@ -51,17 +56,25 @@ server.listen(3000, function () {
                 clearInterval(interValID);
                 console.log("Spiel gestoppt: keine Clients", clients.length);
             }
-        })
+        });
+
+        socket.on("reset", function(){
+            console.log("resete matrix...");
+            matrix = [];
+            objekteArray = [];
+
+
+            initGame();
+            interValID = setInterval(updateGame, 100);
+            
+
+        });
 
     })
 
 });
 //game logic on server
 
-i = 0;
-matrix = createMatrix(100);
-objekteArray = [];
-jahreszeiten = 0;
 
 function createMatrix(length) {
     let matrix = [];

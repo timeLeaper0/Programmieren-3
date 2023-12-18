@@ -2,6 +2,10 @@ let matrix = createMatrix(100);
 let objekteArray = [];
 let jahreszeiten = 0;
 
+const socket = io();
+
+
+
 function setup() {
     createCanvas(500, 500);
     frameRate(60);
@@ -25,3 +29,5 @@ function draw() {
 
     i++;
 }
+
+
