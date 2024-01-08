@@ -39,6 +39,7 @@ server.listen(3000, function () {
     io.on("connection", function (socket) {
         console.log("ws connection established...")
         //socket.emit("matrix", matrix);
+        //io.sockets.emit("matrix",matrix)
         clients.push(socket.id);
 
         if (clients.length == 1 && isGameRunning == false) {
@@ -51,7 +52,7 @@ server.listen(3000, function () {
         socket.on("disconnect", function () {
             console.log("client left...");
             const foundIndex = clients.findIndex(id => id === socket.id);
-            if (foundIndex >= 0) {
+            if (foundIndex <= 0) {
                 isGameRunning = false;
                 clearInterval(interValID);
                 console.log("Spiel gestoppt: keine Clients", clients.length);
@@ -60,12 +61,25 @@ server.listen(3000, function () {
 
         socket.on("reset", function(){
             console.log("resete matrix...");
-            matrix = [];
+            //matrix = [];
+
+            //!is working!//
             objekteArray = [];
+            //!is working!//
 
 
+           // for(let i=0; i < objekteArray.length; i++){
+           //  objekteArray[i]=0;
+
+             //return objekteArray;
+           // }
+
+
+            //io.sockets.emit("empty field")
+            //createMatrix(100);
+            //io.sockets.emit("neue matrix", matrix);
             initGame();
-            interValID = setInterval(updateGame, 100);
+            
             
 
         });
@@ -91,14 +105,14 @@ function createMatrix(length) {
 function initGame() {
     console.log("init game")
     objekteArray.push(new Gras(45, 45));
-    console.log("Sende Matrix zu clients...");
+    //console.log("Sende Matrix zu clients...");
     io.sockets.emit("matrix", matrix);
 
 
 }
 
 function updateGame() {
-    console.log("update game");
+    //console.log("update game");
     for (let i = 0; i < objekteArray.length; i++) {
         objekteArray[i].spielzug();
     }
@@ -112,7 +126,7 @@ function updateGame() {
 
     i++;
     //console.log(matrix);
-    console.log("Sende Matrix zu clients...");
+   // console.log("Sende Matrix zu clients...");
     io.sockets.emit("matrix", matrix);
 
 }
