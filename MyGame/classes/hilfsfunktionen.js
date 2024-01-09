@@ -48,6 +48,7 @@ let jahreszeitenFarben=[
 ]
 
 function quadrat(zeile, spalte, sw) {
+    console.log("yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeesss")
     let farbe=jahreszeitenFarben[jahreszeiten]
     if (sw === 1) {
         fill(farbe[0],farbe[1],farbe[2])
