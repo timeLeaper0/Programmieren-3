@@ -51,7 +51,7 @@ server.listen(3000, function () {
         socket.on("disconnect", function () {
             console.log("client left...");
             const foundIndex = clients.findIndex(id => id === socket.id);
-            if (foundIndex == 0) {
+            if (foundIndex >= 0) {
                 isGameRunning = false;
                 clearInterval(interValID);
                 console.log("Spiel gestoppt: keine Clients", clients.length);
@@ -60,7 +60,7 @@ server.listen(3000, function () {
 
         socket.on("reset", function(){
             console.log("resete matrix...");
-            matrix = createMatrix(100);
+            matrix = createMatrix
             objekteArray = [];
 
 
@@ -98,7 +98,7 @@ function initGame() {
 }
 
 function updateGame() {
-    //console.log("update game");
+    console.log("update game");
     for (let i = 0; i < objekteArray.length; i++) {
         objekteArray[i].spielzug();
     }
@@ -112,7 +112,7 @@ function updateGame() {
 
     i++;
     //console.log(matrix);
-    //console.log("Sende Matrix zu clients...");
+    console.log("Sende Matrix zu clients...");
     io.sockets.emit("matrix", matrix);
 
 }
