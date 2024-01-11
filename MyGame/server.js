@@ -60,7 +60,7 @@ server.listen(3000, function () {
 
         socket.on("reset", function(){
             console.log("resete matrix...");
-            matrix = createMatrix
+            matrix = createMatrix(100);
             objekteArray = [];
 
 
