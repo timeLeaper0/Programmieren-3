@@ -16,10 +16,10 @@ let clients = [];
 let isGameRunning = false;
 let interValID;
 
-i = 0;
+let i = 0;
 matrix = createMatrix(100);
 objekteArray = [];
-jahreszeiten = 0;
+jahreszeit = 0;
 
 app.use(express.static("./client"));
 
@@ -46,12 +46,20 @@ server.listen(3000, function () {
             initGame();
             interValID = setInterval(updateGame, 100);
             isGameRunning = true;
+            //set interval für jahreszeit
+            jahreszeit= setInterval(seasons,4000);
+            
         }
 
         socket.on("disconnect", function () {
             console.log("client left...");
             const foundIndex = clients.findIndex(id => id === socket.id);
-            if (foundIndex >= 0) {
+            //client disconneted, finden, löschen
+            if(foundIndex >= 0){
+                clients.splice(foundIndex,1);
+            }
+            
+            if (clients.length == 0) {
                 isGameRunning = false;
                 clearInterval(interValID);
                 console.log("Spiel gestoppt: keine Clients", clients.length);
@@ -97,22 +105,32 @@ function initGame() {
 
 }
 
+function seasons(){
+    console.log("neue Jahreszeit")
+        jahreszeit++;
+        if (jahreszeit >= 4) {
+            jahreszeit = 0;
+        }
+
+    io.sockets.emit("Jahreszeit", jahreszeit)   
+}
+
 function updateGame() {
-    console.log("update game");
+    //console.log("update game");
     for (let i = 0; i < objekteArray.length; i++) {
         objekteArray[i].spielzug();
     }
-    if (i % 100 === 0) {
-        console.log("neue Jahreszeit")
-        jahreszeiten++;
-        if (jahreszeiten >= 4) {
-            jahreszeiten = 0;
-        }
-    }
+    // if (i % 100 === 0) {
+    //     console.log("neue Jahreszeit")
+    //     jahreszeiten++;
+    //     if (jahreszeiten >= 4) {
+    //         jahreszeiten = 0;
+    //     }
+    // }
 
-    i++;
+    // i++;
     //console.log(matrix);
-    console.log("Sende Matrix zu clients...");
+    //console.log("Sende Matrix zu clients...");
     io.sockets.emit("matrix", matrix);
 
 }

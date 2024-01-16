@@ -1,5 +1,5 @@
 let matrix =[];
-let jahreszeiten = 1;
+let jahreszeiten=1;
 let lenght= 100;
 let seite = 500 / matrix.length
 //let klick= false;
@@ -19,11 +19,18 @@ function main(){
     }
 
     //function resetMatrix(){
+        
    //     klick=true;
     //}
+    function neueJahreszeit(jahreszeit){
+        console.log("Hallo", jahreszeit)
+        jahreszeiten=jahreszeit;  
+    }
 
     socket.on("matrix", gotMatrix);
    // socket.on("neue matrix",resetMatrix)
+
+   socket.on("Jahreszeit", neueJahreszeit )
 
 
     function resetMatrix(){
@@ -54,6 +61,11 @@ function draw(){
       //  klick=false;
    // }
 }
+
+
+
+
+
 
 let jahreszeitenFarben=[
     [235,235,235],
