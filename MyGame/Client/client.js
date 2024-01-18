@@ -1,8 +1,8 @@
 let matrix =[];
-let jahreszeiten=1;
+let jahreszeiten = 3;
 let lenght= 100;
 let seite = 500 / matrix.length
-//let klick= false;
+
 
 
 
@@ -14,21 +14,18 @@ function main(){
 
 
     function gotMatrix(data){
-        //console.log(data);
+        
         matrix= data;
     }
 
-    //function resetMatrix(){
-        
-   //     klick=true;
-    //}
-    function neueJahreszeit(jahreszeit){
-        console.log("Hallo", jahreszeit)
-        jahreszeiten=jahreszeit;  
+    
+    function neueJahreszeit(data){
+        console.log("Hallo", data)
+        jahreszeiten=data;  
     }
 
     socket.on("matrix", gotMatrix);
-   // socket.on("neue matrix",resetMatrix)
+
 
    socket.on("Jahreszeit", neueJahreszeit )
 
@@ -51,27 +48,22 @@ function draw(){
 
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix.length; j++) {
-            //console.log(j)
             quadrat(i, j, matrix[i][j])
         }
     }
 
-    //if(klick==true){
+   
         
-      //  klick=false;
-   // }
+      
 }
 
 
-
-
-
-
 let jahreszeitenFarben=[
-    [235,235,235],
-    [34,139,34],
-    [147,154,84],
-    [166,94,47]
+    [235,235,235],//winter
+    [34,139,34],//spring
+    [147,154,84],//summer
+    [166,94,47]//autumn
+    
 ]
 
 function quadrat(zeile, spalte, sw) {

@@ -15,11 +15,13 @@ let io = require("socket.io")(server);
 let clients = [];
 let isGameRunning = false;
 let interValID;
+let intervalSeasonID;
 
 let i = 0;
 matrix = createMatrix(100);
 objekteArray = [];
-jahreszeit = 0;
+grasArray=[];
+let jahreszeit = 0;
 
 app.use(express.static("./client"));
 
@@ -47,8 +49,8 @@ server.listen(3000, function () {
             interValID = setInterval(updateGame, 100);
             isGameRunning = true;
             //set interval für jahreszeit
-            jahreszeit= setInterval(seasons,4000);
-            
+            intervalSeasonID = setInterval(seasons,1000);
+            //setTimeout(intervalSeasonID,25000);
         }
 
         socket.on("disconnect", function () {
@@ -98,7 +100,7 @@ function createMatrix(length) {
 
 function initGame() {
     console.log("init game")
-    objekteArray.push(new Gras(45, 45));
+    grasArray.push(new Gras(45, 45));
     console.log("Sende Matrix zu clients...");
     io.sockets.emit("matrix", matrix);
 
@@ -106,19 +108,26 @@ function initGame() {
 }
 
 function seasons(){
-    console.log("neue Jahreszeit")
-        jahreszeit++;
-        if (jahreszeit >= 4) {
-            jahreszeit = 0;
+     
+        
+        if (jahreszeit >= 3) {
+            console.log("000000000000")
+            jahreszeit = -1;
         }
-
-    io.sockets.emit("Jahreszeit", jahreszeit)   
+        jahreszeit++;
+        console.log("neue Jahreszeit", jahreszeit)
+    io.sockets.emit("Jahreszeit", jahreszeit)
 }
 
 function updateGame() {
     //console.log("update game");
     for (let i = 0; i < objekteArray.length; i++) {
         objekteArray[i].spielzug();
+        grasArray[i].spielzug();
+    }
+
+    if (grasArray.length == 6){
+      grasArray.push(new Gras(utils.randomNumber(0,matrix.length),utils.randomNumber(0,matrix.length)));
     }
     // if (i % 100 === 0) {
     //     console.log("neue Jahreszeit")

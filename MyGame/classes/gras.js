@@ -38,7 +38,7 @@ module.exports = class Gras extends Lebewesen {
 
             if (grasListe.length > 0) {
                 let koordinate = grasListe[utils.randomNumber(0, grasListe.length)];
-                objekteArray.push(new Gras(koordinate[0], koordinate[1]));
+                grasArray.push(new Gras(koordinate[0], koordinate[1]));
             }
             return;
         }
