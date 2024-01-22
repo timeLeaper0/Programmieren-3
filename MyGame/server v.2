@@ -21,6 +21,7 @@ let intervalSeasonID;
 let i = 0;
 matrix = createMatrix(100);
 objekteArray = [];
+grasArray=[];
 let jahreszeit = 0;
 
 app.use(express.static("./client"));
@@ -49,7 +50,7 @@ server.listen(3000, function () {
             interValID = setInterval(updateGame, 100);
             isGameRunning = true;
             //set interval für jahreszeit
-            intervalSeasonID = setInterval(seasons, 1000);
+            intervalSeasonID = setInterval(seasons,1000);
             //setTimeout(intervalSeasonID,25000);
         }
 
@@ -57,10 +58,10 @@ server.listen(3000, function () {
             console.log("client left...");
             const foundIndex = clients.findIndex(id => id === socket.id);
             //client disconneted, finden, löschen
-            if (foundIndex >= 0) {
-                clients.splice(foundIndex, 1);
+            if(foundIndex >= 0){
+                clients.splice(foundIndex,1);
             }
-
+            
             if (clients.length == 0) {
                 isGameRunning = false;
                 clearInterval(interValID);
@@ -68,7 +69,7 @@ server.listen(3000, function () {
             }
         });
 
-        socket.on("reset", function () {
+        socket.on("reset", function(){
             console.log("resete matrix...");
             matrix = createMatrix(100);
             objekteArray = [];
@@ -76,7 +77,7 @@ server.listen(3000, function () {
 
             initGame();
             //interValID = setInterval(updateGame, 100);
-
+            
 
         });
 
@@ -100,94 +101,45 @@ function createMatrix(length) {
 
 function initGame() {
     console.log("init game")
-    objekteArray.push(new Gras(45, 45));
-
-    //also working
-
-    //for (i = 0; i <= 6; i++) {
-        //objekteArray.push(new Gras(utils.randomNumber(0,matrix.length),utils.randomNumber(0,matrix.length)));
-        //}
-
-    //also working
-
-
+    grasArray.push(new Gras(45, 45));
     console.log("Sende Matrix zu clients...");
     io.sockets.emit("matrix", matrix);
 
 
 }
 
-//gras aus objekte array filtern, anzahl gras objekte zählen, wenn anzahl gras gleich oder weniger als 6 -> mehr gras erstellen lassen
-
-function grasFilter() {
-    //console.log("filtern.....")
-    let gefiltertesGras = [];
-    for (let i = 0; i < objekteArray.length; i++) {
+function seasons(){
+     
         
-        let objekt = objekteArray[i];
-        //console.log("typeof "+ typeof objekt)
-        if (Gras.prototype.isPrototypeOf(objekt)) {
-            //console.log("is it working until here?"+ " no!")
-            gefiltertesGras.push(objekt)
-            console.log("gefiltertesGras:"+gefiltertesGras.length)
+        if (jahreszeit >= 3) {
+            console.log("000000000000")
+            jahreszeit = -1;
         }
-        //console.log(gefiltertesGras.length)
-        
-        
-    }
-    
-    return gefiltertesGras;
-}
-
-
-
-
-function seasons() {
-    if (jahreszeit >= 3) {
-        console.log("000000000000")
-        jahreszeit = -1;
-    }
-    jahreszeit++;
-    console.log("neue Jahreszeit", jahreszeit)
+        jahreszeit++;
+        console.log("neue Jahreszeit", jahreszeit)
     io.sockets.emit("Jahreszeit", jahreszeit)
 }
 
 function updateGame() {
-    console.log("update game");
-    for (let i = 0; i < objekteArray.length; i++) {
-        //console.log(objekteArray.length)
+    //console.log("update game");
+    let arrays = objekteArray.length + grasArray.length
+    for (let i = 0; i < arrays; i++) {
         objekteArray[i].spielzug();
-       
-        
-
-       
-
-
-        
-        //grasArray[i].spielzug();
-        //console.log("grasssssssss");
-    }
-   
-    let anzahlGras = grasFilter();
-    //console.log(anzahlGras.length)
-
-    if (anzahlGras.length < 7) {
-        //console.log("zu wenig grass");
-        objekteArray.push(new Gras(100, 100));
-        //for (i = 0; i <= 6; i++) {
-            //objekteArray.push(new Gras(utils.randomNumber(0,matrix.length),utils.randomNumber(0,matrix.length)));
-        //}
-
+        grasArray[i].spielzug();
     }
 
-
-
-    // if (grasArray.length <= 6){
-    //grasArray.push(new Gras(utils.randomNumber(0,matrix.length),utils.randomNumber(0,matrix.length)));
+    if (grasArray.length >= 6){
+      grasArray.push(new Gras(utils.randomNumber(0,matrix.length),utils.randomNumber(0,matrix.length)));
+    }
+    // if (i % 100 === 0) {
+    //     console.log("neue Jahreszeit")
+    //     jahreszeiten++;
+    //     if (jahreszeiten >= 4) {
+    //         jahreszeiten = 0;
+    //     }
     // }
 
-   
-
+    // i++;
     //console.log(matrix);
     //console.log("Sende Matrix zu clients...");
     io.sockets.emit("matrix", matrix);
