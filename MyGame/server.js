@@ -18,10 +18,12 @@ let isGameRunning = false;
 let interValID;
 let intervalSeasonID;
 
-let i = 0;
+
 matrix = createMatrix(100);
 objekteArray = [];
 let jahreszeit = 0;
+let beginnendeJahreszeit = -1;
+
 
 app.use(express.static("./client"));
 
@@ -31,12 +33,6 @@ app.get("/", function (req, res) {
 
 server.listen(3000, function () {
     console.log("Der Server läuft auf Port 3000...")
-
-    //   initGame();
-    //   setInterval(function(){
-    //       updateGame();
-    //   },1000);
-    // }, );
 
     io.on("connection", function (socket) {
         console.log("ws connection established...")
@@ -48,9 +44,9 @@ server.listen(3000, function () {
             initGame();
             interValID = setInterval(updateGame, 100);
             isGameRunning = true;
-            //set interval für jahreszeit
-            intervalSeasonID = setInterval(seasons, 1000);
-            //setTimeout(intervalSeasonID,25000);
+            intervalSeasonID = setInterval(seasons, 10000);
+           
+            
         }
 
         socket.on("disconnect", function () {
@@ -75,7 +71,7 @@ server.listen(3000, function () {
 
 
             initGame();
-            //interValID = setInterval(updateGame, 100);
+            
 
 
         });
@@ -99,8 +95,12 @@ function createMatrix(length) {
 
 
 function initGame() {
-    console.log("init game")
+    console.log("init game");
     objekteArray.push(new Gras(45, 45));
+    jahreszeit = 0;
+    beginnendeJahreszeit = 0;
+    io.sockets.emit("beginnende Jahreszeit", beginnendeJahreszeit);
+    console.log("beginnendeJahrszeit: "+beginnendeJahreszeit);
 
     //also working
 
@@ -125,9 +125,12 @@ function grasFilter() {
     for (let i = 0; i < objekteArray.length; i++) {
         
         let objekt = objekteArray[i];
-        //console.log("typeof "+ typeof objekt)
-        if (Gras.prototype.isPrototypeOf(objekt)) {
-            //console.log("is it working until here?"+ " no!")
+        
+        if (
+            //Gras.prototype.isPrototypeOf(objekt)
+            Gras === objekt
+            ) {
+            console.log("is it working until here?"+ " yes!")
             gefiltertesGras.push(objekt)
             console.log("gefiltertesGras:"+gefiltertesGras.length)
         }
@@ -153,7 +156,7 @@ function seasons() {
 }
 
 function updateGame() {
-    console.log("update game");
+    //console.log("update game");
     for (let i = 0; i < objekteArray.length; i++) {
         //console.log(objekteArray.length)
         objekteArray[i].spielzug();
@@ -171,9 +174,12 @@ function updateGame() {
     let anzahlGras = grasFilter();
     //console.log(anzahlGras.length)
 
-    if (anzahlGras.length < 7) {
+    if (anzahlGras.length <= 6) {
         //console.log("zu wenig grass");
-        objekteArray.push(new Gras(100, 100));
+        
+        
+        objekteArray.push(new Gras(utils.randomNumber(0,matrix.length),utils.randomNumber(0,matrix.length)));
+        
         //for (i = 0; i <= 6; i++) {
             //objekteArray.push(new Gras(utils.randomNumber(0,matrix.length),utils.randomNumber(0,matrix.length)));
         //}
